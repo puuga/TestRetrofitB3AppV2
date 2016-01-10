@@ -5,9 +5,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.siwawes.testretrofitb3appv2.model.Message;
+import com.siwawes.testretrofitb3appv2.service.APIService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +34,31 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+
+        callMessages();
+    }
+
+    private void callMessages() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.github.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        APIService service = retrofit.create(APIService.class);
+
+        Call<Message[]> call = service.loadMessages();
+        call.enqueue(new Callback<Message[]>() {
+            @Override
+            public void onResponse(Response<Message[]> response) {
+                Message[] messages = response.body();
+                Log.d("respones", "Messages length:" + messages.length);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
             }
         });
     }
