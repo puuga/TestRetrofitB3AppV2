@@ -15,9 +15,9 @@ import com.siwawes.testretrofitb3appv2.service.APIService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.GsonConverterFactory;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,13 +51,13 @@ public class MainActivity extends AppCompatActivity {
         Call<Message[]> call = service.loadMessages();
         call.enqueue(new Callback<Message[]>() {
             @Override
-            public void onResponse(Response<Message[]> response) {
+            public void onResponse(Call<Message[]> call, Response<Message[]> response) {
                 Message[] messages = response.body();
                 Log.d("respones", "Messages length:" + messages.length);
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<Message[]> call, Throwable t) {
 
             }
         });
